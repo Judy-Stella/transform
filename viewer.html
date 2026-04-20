@@ -5,8 +5,10 @@
     <title>Display and Transform XML</title>
     <script type="text/javascript">
         function display() {
+            // Assessment 3 指定的远程 XML
             var xmlURL = "https://judy-stella.github.io/transform/badges.xml";
-            var xslURL = "https://judy-stella.github.io/transform/style.xsl";
+            // 本地 XSLT 文件
+            var xmlstyleURL = "https://judy-stella.github.io/transform/style.xsl";
 
             var request;
             try {
@@ -16,24 +18,17 @@
                     request = new ActiveXObject("Microsoft.XMLHTTP");
                 }
 
+                // 加载远程 XML
                 request.open("GET", xmlURL, false);
                 request.send();
                 var xmlDoc = request.responseXML;
 
-                request.open("GET", xslURL, false);
+                // 加载本地 XSLT
+                request.open("GET", xmlstyleURL, false);
                 request.send();
                 var xslDoc = request.responseXML;
 
-                if (!xmlDoc) {
-                    alert("XML file could not be loaded.");
-                    return;
-                }
-
-                if (!xslDoc) {
-                    alert("XSL file could not be loaded.");
-                    return;
-                }
-
+                // 执行转换
                 if (window.ActiveXObject) {
                     var result = xmlDoc.transformNode(xslDoc);
                     document.getElementById("output").innerHTML = result;
