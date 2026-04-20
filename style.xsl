@@ -2,104 +2,187 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:output method="html" indent="yes"/>
+	<xsl:output method="html" indent="yes"/>
 
-  <!-- ================================================================
-       Single root template: builds the whole HTML document in one go.
-       (The sample solution uses four separate templates with
-       apply-templates; this stylesheet uses for-each instead to keep
-       the logic in one place.)
-       ================================================================ -->
-  <xsl:template match="/">
-    <html>
-      <head>
-        <title>Scout Activity Badges</title>
-        <style type="text/css">
-          body      { font-family: Arial, Helvetica, sans-serif;
-                      margin: 30px; background:#f7f7f2; color:#222; }
-          h1        { color:#2d6a4f; border-bottom:3px solid #2d6a4f;
-                      padding-bottom:6px; }
-          .badge    { background:#ffffff; border:1px solid #c9d6c1;
-                      border-radius:6px; padding:14px 18px;
-                      margin-bottom:18px;
-                      box-shadow:2px 2px 4px rgba(0,0,0,0.05); }
-          .b-name   { font-size:1.2em; font-weight:bold;
-                      color:#1b4332; margin:0 0 4px 0; }
-          .b-desc   { font-style:italic; color:#555; margin:0 0 10px 0; }
-          table     { border-collapse:collapse; width:60%; }
-          th, td    { border:1px solid #aaa; padding:6px 10px;
-                      text-align:left; }
-          th        { background:#d8f3dc; color:#1b4332; }
-          .yes      { color:#2d6a4f; font-weight:bold; }
-          .no       { color:#9d0208; }
-          footer    { margin-top:30px; text-align:center;
-                      color:#666; font-size:0.9em;
-                      border-top:1px solid #ccc; padding-top:8px; }
-        </style>
-      </head>
+	<xsl:template match="/">
+		<html>
+			<head>
+				<title>Scout Activity Badges</title>
+				<style type="text/css">
+					body {
+					font-family: "Segoe UI", Arial, sans-serif;
+					margin: 0;
+					padding: 40px 20px;
+					background: linear-gradient(135deg, #eef2ff, #f8fafc);
+					color: #1e293b;
+					}
 
-      <body>
-        <h1>Scout Activity Badges</h1>
+					.container {
+					max-width: 1100px;
+					margin: 0 auto;
+					}
 
-        <!-- Filter (only type='activity') + alphabetical sort,
-             all inside ONE for-each loop. -->
-        <xsl:for-each select="badges/badge[@type='activity']">
-          <xsl:sort select="name" data-type="text" order="ascending"/>
+					h1 {
+					text-align: center;
+					font-size: 2.4em;
+					margin-bottom: 10px;
+					color: #0f172a;
+					}
 
-          <div class="badge">
-            <p class="b-name"><xsl:value-of select="name"/></p>
-            <p class="b-desc"><xsl:value-of select="description"/></p>
+					.subtitle {
+					text-align: center;
+					color: #64748b;
+					font-size: 1.05em;
+					margin-bottom: 35px;
+					}
 
-            <table>
-              <tr>
-                <th>Section</th>
-                <th>Availability</th>
-              </tr>
+					.badge {
+					background: #ffffff;
+					border-radius: 18px;
+					padding: 22px;
+					margin-bottom: 24px;
+					box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+					border: 1px solid #e2e8f0;
+					transition: 0.3s ease;
+					}
 
-              <!-- Inner loop over <availability> elements -->
-              <xsl:for-each select="levels/availability">
-                <tr>
-                  <!-- xsl:choose #1: map the level attribute to a
-                       nicely-capitalised section name -->
-                  <td>
-                    <xsl:choose>
-                      <xsl:when test="@level='beaver'">Beaver</xsl:when>
-                      <xsl:when test="@level='cub'">Cub</xsl:when>
-                      <xsl:when test="@level='scout'">Scout</xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="@level"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </td>
+					.badge:hover {
+					transform: translateY(-3px);
+					box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12);
+					}
 
-                  <!-- xsl:choose #2: colour the text depending on
-                       whether the badge is Available or Not Available -->
-                  <td>
-                    <xsl:choose>
-                      <xsl:when test=". = 'Available'">
-                        <span class="yes">&#x2714; Available</span>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <span class="no">&#x2718; Not Available</span>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </td>
-                </tr>
-              </xsl:for-each>
-            </table>
-          </div>
-        </xsl:for-each>
+					.b-name {
+					font-size: 1.4em;
+					font-weight: 700;
+					color: #2563eb;
+					margin: 0 0 8px 0;
+					}
 
-        <!-- Copyright notice using XHTML character entities
-             (&#xA9; = ©, &#x2014; = —) -->
-        <footer>
-          <p>
-            &#xA9; 2026 College Productions Ltd &#x2014;
-            All rights reserved.
-          </p>
-        </footer>
-      </body>
-    </html>
-  </xsl:template>
+					.b-desc {
+					color: #475569;
+					font-size: 1em;
+					line-height: 1.6;
+					margin: 0 0 16px 0;
+					}
+
+					table {
+					width: 100%;
+					border-collapse: collapse;
+					overflow: hidden;
+					border-radius: 12px;
+					background: #f8fafc;
+					}
+
+					th {
+					background: #2563eb;
+					color: white;
+					text-align: left;
+					padding: 12px 14px;
+					font-size: 0.95em;
+					letter-spacing: 0.3px;
+					}
+
+					td {
+					padding: 12px 14px;
+					border-bottom: 1px solid #e2e8f0;
+					font-size: 0.96em;
+					}
+
+					tr:last-child td {
+					border-bottom: none;
+					}
+
+					.section-name {
+					font-weight: 600;
+					color: #0f172a;
+					}
+
+					.yes {
+					display: inline-block;
+					padding: 6px 12px;
+					border-radius: 999px;
+					background: #dcfce7;
+					color: #166534;
+					font-weight: 600;
+					font-size: 0.92em;
+					}
+
+					.no {
+					display: inline-block;
+					padding: 6px 12px;
+					border-radius: 999px;
+					background: #fee2e2;
+					color: #991b1b;
+					font-weight: 600;
+					font-size: 0.92em;
+					}
+
+					footer {
+					text-align: center;
+					margin-top: 35px;
+					color: #64748b;
+					font-size: 0.92em;
+					}
+				</style>
+			</head>
+
+			<body>
+				<div class="container">
+					<h1>Scout Activity Badges</h1>
+					<p class="subtitle">Modern styled badge list with section availability</p>
+
+					<xsl:for-each select="badges/badge[@type='activity']">
+						<xsl:sort select="name" data-type="text" order="ascending"/>
+
+						<div class="badge">
+							<p class="b-name">
+								<xsl:value-of select="name"/>
+							</p>
+							<p class="b-desc">
+								<xsl:value-of select="description"/>
+							</p>
+
+							<table>
+								<tr>
+									<th>Section</th>
+									<th>Availability</th>
+								</tr>
+
+								<xsl:for-each select="levels/availability">
+									<tr>
+										<td class="section-name">
+											<xsl:choose>
+												<xsl:when test="@level='beaver'">Beaver</xsl:when>
+												<xsl:when test="@level='cub'">Cub</xsl:when>
+												<xsl:when test="@level='scout'">Scout</xsl:when>
+												<xsl:otherwise>
+													<xsl:value-of select="@level"/>
+												</xsl:otherwise>
+											</xsl:choose>
+										</td>
+
+										<td>
+											<xsl:choose>
+												<xsl:when test=". = 'Available'">
+													<span class="yes">&#x2714; Available</span>
+												</xsl:when>
+												<xsl:otherwise>
+													<span class="no">&#x2718; Not Available</span>
+												</xsl:otherwise>
+											</xsl:choose>
+										</td>
+									</tr>
+								</xsl:for-each>
+							</table>
+						</div>
+					</xsl:for-each>
+
+					<footer>
+						<p>&#xA9; 2026 College Productions Ltd &#x2014; All rights reserved.</p>
+					</footer>
+				</div>
+			</body>
+		</html>
+	</xsl:template>
 
 </xsl:stylesheet>
